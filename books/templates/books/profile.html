@@ -36,35 +36,38 @@
                                         </div>
                                     </div>
 
-                                    {% if user.name %}
+                                    <div>
+                                        <div class="cart_item_title">Номер телефона</div>
+                                        <div class="cart_item_text">
+                                            {% if user.phone_number %}
+                                            {{ user.phone_number }}
+                                            {% else %}
+                                            Не указан
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
                                     <div>
                                         <div class="cart_item_title">Имя</div>
                                         <div class="cart_item_text">
+                                            {% if user.name %}
                                             {{ user.name }}
+                                            {% else %}
+                                            Не указано
+                                            {% endif %}
                                         </div>
                                     </div>
 
                                     <div>
                                         <div class="cart_item_title">Фамилия</div>
                                         <div class="cart_item_text">
+                                            {% if user.surname %}
                                             {{ user.surname }}
+                                            {% else %}
+                                            Не указано
+                                            {% endif %}
                                         </div>
                                     </div>
-                                    {% else %}
-                                    <div>
-                                        <div class="cart_item_title">Имя</div>
-                                        <div class="cart_item_text">
-                                            Имя не указано
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <div class="cart_item_title">Фамилия</div>
-                                        <div class="cart_item_text">
-                                            Фамилия не указана
-                                        </div>
-                                    </div>
-                                    {% endif %}
 
                                     <div>
                                         <div class="cart_item_title">Количество заказов</div>
@@ -93,10 +96,11 @@
 
                     {% if user|get_user_orders_num %}
 
-                    <h3>История заказов:</h3><p>
+                    <h3>История заказов:</h3>
+                    <p>
 
-                    <!--Возвращает заказы пользователя-->
-                    {% for item in user.user_orders.all %}
+                        <!--Возвращает заказы пользователя-->
+                        {% for item in user.user_orders.all %}
 
                     <div class="cart_items" style="margin-top: 26px">
 

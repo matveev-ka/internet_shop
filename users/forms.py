@@ -88,7 +88,8 @@ class UserChangeForm(forms.ModelForm):
     """Форма изменения данных для пользователя."""
     name = forms.CharField(label='Введите новое имя', widget=forms.TextInput(attrs={'class': 'form-control'}))
     surname = forms.CharField(label='Введите новую фамилию', widget=forms.TextInput(attrs={'class': 'form-control'}))
+    phone_number = forms.CharField(label='Контактный номер телефона', widget=forms.TextInput(attrs={'class': 'form-control'}))
 
     class Meta:
         model = User
-        fields = ['name', 'surname']
+        fields = ['name', 'surname', 'phone_number']

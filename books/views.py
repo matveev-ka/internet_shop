@@ -13,18 +13,24 @@ User = get_user_model()
 
 def change_profile(request):
     """Изменение данных пользователя"""
+    data = {
+        'name': request.user.name,
+        'surname': request.user.surname,
+        'phone_number': request.user.phone_number,
+    }
     if request.method == 'POST':
         form = UserChangeForm(request.POST)
         if form.is_valid():
             request.user.name = form.cleaned_data['name']
             request.user.surname = form.cleaned_data['surname']
+            request.user.phone_number = form.cleaned_data['phone_number']
             request.user.save()
             messages.success(request, 'Данные профиля успешно изменены')
             return redirect('profile', pk=request.user.pk)
         else:
-            messages.error(request, 'Ошибка изменение данных')
+            messages.error(request, 'Ошибка изменения данных')
     else:
-        form = UserChangeForm()
+        form = UserChangeForm(data)
     return render(request, 'books/change_profile.html', {'title': 'Изменение профиля', 'form': form})
 
 
@@ -62,10 +68,10 @@ class BookOrdering(ListView):
             order_by = 'цене (по возрастанию)'
         if order_by == '-price':
             order_by = 'цене (по убыванию)'
-        if order_by == 'year':
-            order_by = 'году издания (по возрастанию)'
-        if order_by == '-year':
-            order_by = 'году издания (по убыванию)'
+        if order_by == 'created_at':
+            order_by = 'новизне (по возрастанию)'
+        if order_by == '-created_at':
+            order_by = 'новизне (по убыванию)'
         context['title'] = 'Сортировка по ' + order_by
         context['cart_book_form'] = CartAddBookForm()
         return context

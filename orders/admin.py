@@ -9,7 +9,7 @@ class OrderItemInline(admin.TabularInline):
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user', 'city', 'street', 'house', 'flat', 'phone_number', 'paid_by',
+    list_display = ['id', 'user', 'city', 'street', 'house', 'flat', 'paid_by',
                     'created', 'updated']
     list_filter = ['created', 'updated']
     list_display_links = ('id',)

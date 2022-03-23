@@ -11,7 +11,6 @@ class Order(models.Model):
     street = models.CharField(max_length=50, verbose_name='Улица')
     house = models.CharField(max_length=50, verbose_name='Дом')
     flat = models.CharField(max_length=50, verbose_name='Квартира')
-    phone_number = models.CharField(max_length=15, verbose_name='Контактный номер телефона')
     created = models.DateTimeField(auto_now_add=True, verbose_name='Заказ принят')
     updated = models.DateTimeField(auto_now=True, verbose_name='Заказ обновлен')
     paid_by = models.CharField(max_length=50, verbose_name='Способ оплаты')
