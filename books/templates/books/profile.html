@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% load books_tags %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block breadcrumbs %}
+<nav style="--bs-breadcrumb-divider: '>'; margin-left: 20px;" aria-label="breadcrumb">
+    <ol class="breadcrumb mt-3">
+        <li class="breadcrumb-item active"><a href="{% url 'home' %}">Главная</a></li>
+        <li class="breadcrumb-item">Личный кабинет: {{ user.email }}</li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+
+<div class="cart_section">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-10 offset-lg-1">
+
+                <div class="cart_container">
+
+                    <div class="cart_items">
+
+                        <ul class="cart_list" style="padding-right: 26px">
+                            <li class="cart_item">
+                                <div class="d-flex flex-md-row flex-column justify-content-between">
+
+                                    <div>
+                                        <div class="cart_item_title">Адрес электронной почты</div>
+                                        <div class="cart_item_text">
+                                            {{ user.email }}
+                                        </div>
+                                    </div>
+
+                                    {% if user.name %}
+                                    <div>
+                                        <div class="cart_item_title">Имя</div>
+                                        <div class="cart_item_text">
+                                            {{ user.name }}
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div class="cart_item_title">Фамилия</div>
+                                        <div class="cart_item_text">
+                                            {{ user.surname }}
+                                        </div>
+                                    </div>
+                                    {% else %}
+                                    <div>
+                                        <div class="cart_item_title">Имя</div>
+                                        <div class="cart_item_text">
+                                            Имя не указано
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div class="cart_item_title">Фамилия</div>
+                                        <div class="cart_item_text">
+                                            Фамилия не указана
+                                        </div>
+                                    </div>
+                                    {% endif %}
+
+                                    <div>
+                                        <div class="cart_item_title">Количество заказов</div>
+                                        <div class="cart_item_text">
+                                            {{ user|get_user_orders_num }}
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="cart_buttons">
+                        <a href="{% url 'home' %}" style="text-decoration: none">
+                            <button type="button" class="button cart_button_clear">
+                                Вернуться в магазин
+                            </button>
+                        </a>
+                        <a href="{% url 'change_profile' %}">
+                            <button type="button" class="button cart_button_checkout">
+                                Редактировать профиль
+                            </button>
+                        </a>
+                    </div>
+
+                    {% if user|get_user_orders_num %}
+
+                    <h3>История заказов:</h3><p>
+
+                    <!--Возвращает заказы пользователя-->
+                    {% for item in user.user_orders.all %}
+
+                    <div class="cart_items" style="margin-top: 26px">
+
+                        <h5>{{ item }} ({{ item.created }})</h5>
+
+                        <ul class="cart_list" style="padding-right: 26px">
+
+                            <!--Возвращает товары из заказа-->
+                            {% for product in item.items.all %}
+                            {% with book=product.book %}
+
+                            <li class="cart_item clearfix" style="margin: 5px;">
+                                <div class="d-flex flex-md-row flex-column justify-content-between">
+
+                                    <div class="cart_item_image">
+                                        <a href="{{ book.get_absolute_url }}">
+                                            <img src="{{ book.image.url }}" alt="{{ book.title }}">
+                                        </a>
+                                    </div>
+
+                                    <div>
+                                        <div class="cart_item_title">Название</div>
+                                        <div class="cart_item_text">
+                                            <a href="{{ book.get_absolute_url }}">
+                                                {{ book }}
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div class="cart_item_title">Количество</div>
+                                        <div class="cart_item_text">
+                                            {{ product.quantity }}
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div class="cart_item_title">Цена</div>
+                                        <div class="cart_item_text">{{ product.get_cost }} руб.</div>
+                                    </div>
+
+                                </div>
+                            </li>
+                            {% endwith %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <div class="order_total">
+                        <div class="text-md-right">
+                            <div class="order_total_title">Итоговая стоимость</div>
+                            <div class="order_total_amount">{{ item.get_total_cost }} руб.</div>
+                        </div>
+                    </div>
+
+                    {% endfor %}
+
+                    {% endif %}
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block breadcrumbs %}
+<nav style="--bs-breadcrumb-divider: '>'; margin-left: 20px;" aria-label="breadcrumb">
+    <ol class="breadcrumb mt-3">
+        <li class="breadcrumb-item active"><a href="{% url 'home' %}">Главная</a></li>
+        <li class="breadcrumb-item active"><a href="{{ item.category.get_absolute_url }}">{{ item.category }}</a></li>
+        <li class="breadcrumb-item active"><a href="{{ item.get_author_url }}">{{ item.author }}</a></li>
+        <li class="breadcrumb-item">{{ title|truncatewords:5 }}</li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-3">
+                <div class="card-header">
+                    Категория:
+                    <a href="{{ item.category.get_absolute_url }}">
+                        <button type="button" class="btn btn-outline-secondary">
+                            {{ item.category }}
+                        </button>
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="media">
+                        {% if item.image %}
+                        <img align="right" hspace="10" vspace="10" src="{{ item.image.url }}" alt="" width="25%">
+                        {% endif %}
+                        <div class="media-body">
+                            <h5 class="card-title">{{ item.title }}</h5>
+                            <h6 class="card-title text-muted">{{ item.author }}, {{ item.year }}</h6>
+                            {% autoescape off %}
+                            <p class="card-text">{{ item.description|linebreaks }}</p>
+                            {% endautoescape %}
+                            <hr>
+                            <div class="d-flex justify-content-md-end align-items-center">
+                                <form style="padding: 10px;" action="{% url 'cart:cart_add' item.id %}" method="post">
+                                    {{ cart_book_form }}
+                                    {% csrf_token %}
+                                    <input class="btn btn-outline-secondary" type="submit" value="В корзину">
+                                </form>
+                                <span class="fst-italic">{{ item.price }} руб.</span>
+                            </div>
+                            <p><span class="text-muted">Год издания: </span>{{ item.year }}</p>
+                            <p><span class="text-muted">Автор: </span>{{ item.author }}</p>
+                            {% if item.language == item.original_language %}
+                            <p><span class="text-muted">Язык: </span>{{ item.language }}</p>
+                            {% else %}
+                            <p><span class="text-muted">Оригинал: </span>{{ item.original_language }}</p>
+                            <p><span class="text-muted">Перевод: </span>{{ item.language }}</p>
+                            {% endif %}
+                            <p><span class="text-muted">Количество страниц: </span>{{ item.pages }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer text-muted">
+                    Артикул: {{ item.id }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% with comments.count as total_comments %}
+    <h2>Отзывы: {{ total_comments }}</h2>
+    {% endwith %}
+
+    {% for comment in comments %}
+    <div class="row mt-3">
+        <div class="col-md-12">
+            <div class="card mb-3">
+                <div class="card-header">
+                    {{ comment.created }}
+                </div>
+                <div class="card-body">
+                    <div class="media">
+                        <div class="media-body">
+                            <h5 class="card-title">{{ comment.user }}</h5>
+                            <p class="card-text">{{ comment.body|linebreaks }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p>Оставьте отзыв первым.</p>
+    {% endfor %}
+
+    {% if request.user.is_authenticated %}
+
+    <h5>Оставить отзыв:</h5>
+    <form method="post">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <div class="d-grid gap-3">
+            <button class="btn btn-primary" type="submit">Добавить отзыв</button>
+        </div>
+    </form>
+
+    {% else %}
+
+    Чтобы оставить свой комментарий, <a href="{% url 'login' %}">авторизуйтесь</a>.
+
+    {% endif %}
+
+</div>
+
+
+{% endblock %}

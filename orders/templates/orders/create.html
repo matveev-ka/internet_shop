@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load orders_tags %}
+
+{% block title %}
+Оформление заказа
+{% endblock %}
+
+{% block breadcrumbs %}
+<nav style="--bs-breadcrumb-divider: '>'; margin-left: 20px;" aria-label="breadcrumb">
+    <ol class="breadcrumb mt-3">
+        <li class="breadcrumb-item active"><a href="{% url 'home' %}">Главная</a></li>
+        <li class="breadcrumb-item">Оформление заказа</li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <main>
+        <div class="py-5 text-center">
+            <h2>Оформление заказа</h2>
+        </div>
+        <div class="row g-5">
+            <div class="col-md-5 col-lg-4 order-md-last">
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-primary">В корзине</span>
+                    <span class="badge bg-primary rounded-pill">{{ cart|length }}</span>
+                </h4>
+                <ul class="list-group mb-3">
+                    {% for item in cart %}
+                    <li class="list-group-item d-flex justify-content-between lh-sm">
+                        <div>
+                            <h6 class="my-0">{{ item.book.title|truncatechars:25 }}</h6>
+                            <small class="text-muted">{{ item.book.author }}</small>
+                        </div>
+                        <span class="text-muted">{{ item.quantity }}x {{ item.total_price }} руб.</span>
+                    </li>
+                    {% endfor %}
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Итоговая стоимость</span>
+                        <strong>{{ cart.get_total_price }} руб.</strong>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-7 col-lg-8">
+                <form action="." method="post" class="needs-validation" novalidate="">
+                    {% csrf_token %}
+                    <div class="row g-3">
+
+                        <div class="col-sm-6">
+                            <label class="form-label">{{ form.name.label }}</label>
+                            {{ form.name }}
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label">{{ form.surname.label }}</label>
+                            {{ form.surname }}
+                        </div>
+
+
+                        <div class="col-12">
+                            <label class="form-label">{{ form.phone_number.label }}</label>
+                            {{ form.phone_number }}
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label">{{ form.city.label }}</label>
+                            {{ form.city }}
+                        </div>
+
+                        <div class="col-md-5">
+                            <label class="form-label">{{ form.street.label }}</label>
+                            {{ form.street }}
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">{{ form.house.label }}</label>
+                            {{ form.house }}
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">{{ form.flat.label }}</label>
+                            {{ form.flat }}
+                        </div>
+
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="my-3">
+                        <h4 class="mb-3">{{ form.paid_by.label }}</h4>
+                        <div class="form-check">
+                            <input name="paid_by" type="radio" class="form-check-input" required=""
+                                   value="Наличными курьеру" checked="">
+                            {{ form.paid_by.0 }}
+                        </div>
+                        <div class="form-check">
+                            <input name="paid_by" type="radio" class="form-check-input" required=""
+                                   value="Картой курьеру">
+                            {{ form.paid_by.1 }}
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <button class="w-100 btn btn-primary btn-lg" type="submit">Завершить заказ</button>
+                </form>
+            </div>
+        </div>
+    </main>
+</div>
+
+{% endblock %}

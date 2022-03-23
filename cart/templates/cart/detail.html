@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Корзина
+{% endblock %}
+
+{% block breadcrumbs %}
+<nav style="--bs-breadcrumb-divider: '>'; margin-left: 20px;" aria-label="breadcrumb">
+    <ol class="breadcrumb mt-3">
+        <li class="breadcrumb-item active"><a href="{% url 'home' %}">Главная</a></li>
+        <li class="breadcrumb-item">Корзина</li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+
+<div class="cart_section">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-10 offset-lg-1">
+                <div class="cart_container">
+                    {% for item in cart %}
+                    {% with book=item.book %}
+                    <div class="cart_items">
+                        <ul class="cart_list">
+                            <li class="cart_item clearfix">
+                                <div class="d-flex flex-md-row flex-column justify-content-between">
+
+                                    <div class="cart_item_image">
+                                        <a class="book_name" href="{{ book.get_absolute_url }}">
+                                            <img src="{{ book.image.url }}" alt="{{ book.title }}">
+                                        </a>
+                                    </div>
+
+                                    <div>
+                                        <div class="cart_item_title">Название</div>
+                                        <div class="cart_item_text">
+                                            <a class="book_name" href="{{ book.get_absolute_url }}">
+                                                {{ book.title|truncatechars:25 }}
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div class="cart_item_title">Автор</div>
+                                        <div class="cart_item_text">
+                                            <a class="book_name" href="{{ book.get_author_url }}">
+                                                {{ book.author }}
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div class="cart_item_title">Количество</div>
+                                        <div class="cart_item_text">
+                                            <form action="{% url 'cart:cart_add' book.id %}" method="post">
+                                                {{ item.update_quantity_form.quantity }}
+                                                {{ item.update_quantity_form.update }}
+                                                <input class="btn btn-outline-secondary" type="submit" value="Обновить">
+                                                {% csrf_token %}
+                                            </form>
+                                        </div>
+                                    </div>
+
+
+                                    <div>
+                                        <div class="cart_item_title">Цена</div>
+                                        <div class="cart_item_text">{{ item.total_price }} руб.</div>
+                                    </div>
+
+
+                                    <div>
+                                        <a href="{% url 'cart:cart_remove' book.id %}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25"
+                                                 fill="currentColor" class="bi bi-x-lg" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd"
+                                                      d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
+                                                <path fill-rule="evenodd"
+                                                      d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+
+
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    {% endwith %}
+                    {% endfor %}
+
+                    {% if cart %}
+                    <div class="order_total">
+                        <div class="text-md-right">
+                            <div class="order_total_title">Итоговая стоимость</div>
+                            <div class="order_total_amount">{{ cart.get_total_price }} руб.</div>
+                        </div>
+                    </div>
+                    <div class="cart_buttons">
+                        <a href="{% url 'home' %}" style="text-decoration: none">
+                            <button type="button" class="button cart_button_clear">
+                                Вернуться в магазин
+                            </button>
+                        </a>
+                        {% if request.user.is_authenticated %}
+                        <a href="{% url 'orders:order_create' %}">
+                            <button type="button" class="button cart_button_checkout">
+                                Перейти к оформлению
+                            </button>
+                        </a>
+                        {% else %}
+                        <a href="{% url 'login' %}">
+                            <button type="button" class="button cart_button_checkout">
+                                Перейти к оформлению
+                            </button>
+                        </a>
+                        {% endif %}
+                    </div>
+                    {% else %}
+                    <p class="fs-4">В корзине пусто.</p>
+                        <a href="{% url 'home' %}">
+                            <button type="button" class="button cart_button_clear">
+                                Вернуться в магазин
+                            </button>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

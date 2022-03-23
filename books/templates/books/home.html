@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load books_tags %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block breadcrumbs %}
+{% if title != "Главная" %}
+<nav style="--bs-breadcrumb-divider: '>'; margin-left: 20px;" aria-label="breadcrumb">
+    <ol class="breadcrumb mt-3">
+        <li class="breadcrumb-item active"><a href="{% url 'home' %}">Главная</a></li>
+        <li class="breadcrumb-item">{{ title|truncatewords:7 }}</li>
+    </ol>
+</nav>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<!--сортировка-->
+<ul class="list-group list-group-horizontal">
+    <li style="border: 0;" class="list-group-item"><span class="text-muted">Сортировать по:</span></li>
+    <div class="dropdown">
+
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                data-bs-toggle="dropdown" aria-expanded="false">
+            Рейтингу
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li><a class="dropdown-item" href="{{ 'rating'|get_order_url }}">По возрастанию</a></li>
+            <li><a class="dropdown-item" href="{{ '-rating'|get_order_url }}">По убыванию</a></li>
+        </ul>
+
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2"
+                data-bs-toggle="dropdown" aria-expanded="false">
+            Цене
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+            <li><a class="dropdown-item" href="{{ 'price'|get_order_url }}">По возрастанию</a></li>
+            <li><a class="dropdown-item" href="{{ '-price'|get_order_url }}">По убыванию</a></li>
+        </ul>
+
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton3"
+                data-bs-toggle="dropdown" aria-expanded="false">
+            Новизне
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
+            <li><a class="dropdown-item" href="{{ 'year'|get_order_url }}">По возрастанию</a></li>
+            <li><a class="dropdown-item" href="{{ '-year'|get_order_url }}">По убыванию</a></li>
+        </ul>
+    </div>
+</ul>
+
+
+<div class="container mt-2 mb-3">
+    <div class="row row-cols-md-4 g-3">
+        {% for item in books %}
+
+        <div class="card-group">
+            <a href="{{ item.get_absolute_url }}">
+                <div class="card underline_card">
+                    <img width="45%" hspace="10" vspace="10" src="{{ item.image.url }}" alt="{{ item.title }}"
+                         title="{{ item.title }}">
+                    <div class="card-body">
+                        <a class="book_name" href="{{ item.get_absolute_url }}">{{ item.title }}</a>
+                        <p class="fw-lighter"><a class="author_name" href="{{ item.get_author_url }}">
+                            {{ item.author }}</a>, {{ item.year }}
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <form action="{% url 'cart:cart_add' item.id %}" method="post">
+                                {{ cart_book_form }}
+                                {% csrf_token %}
+                                <input class="btn btn-outline-secondary" type="submit" value="В корзину">
+                            </form>
+                            <span class="fst-italic">{{ item.price }} руб.</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

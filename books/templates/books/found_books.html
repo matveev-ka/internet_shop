@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load books_tags %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block breadcrumbs %}
+{% if title != "Главная" %}
+<nav style="--bs-breadcrumb-divider: '>'; margin-left: 20px;" aria-label="breadcrumb">
+    <ol class="breadcrumb mt-3">
+        <li class="breadcrumb-item active"><a href="{% url 'home' %}">Главная</a></li>
+        <li class="breadcrumb-item">{{ title|truncatewords:5 }}</li>
+    </ol>
+</nav>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-3 mb-3">
+    <div class="row row-cols-md-4 g-3">
+        {% for item in books %}
+
+        <div class="card-group">
+            <a href="{{ item.get_absolute_url }}">
+                <div class="card underline_card">
+                    <img width="45%" hspace="10" vspace="10" src="{{ item.image.url }}" alt="{{ item.title }}" title="{{ item.title }}">
+                    <div class="card-body">
+                        {% if search_word %}
+                        <a class="book_name" href="{{ item.get_absolute_url }}">{{ item.title|get_mark_str:search_word }}</a>
+                        {% else %}
+                        <a class="book_name" href="{{ item.get_absolute_url }}">{{ item.title }}</a>
+                        {% endif %}
+                        {% if search_word %}
+                        <p class="fw-lighter"><a class="author_name" href="{{ item.get_author_url }}">{{ item.author|get_mark_str:search_word }}</a>, {{ item.year }} </p>
+                        {% else %}
+                        <p class="fw-lighter"><a class="author_name" href="{{ item.get_author_url }}">{{ item.author }}</a>, {{ item.year }} </p>
+                        {% endif %}
+                        <div class="d-flex justify-content-between align-items-center">
+                            <form action="{% url 'cart:cart_add' item.id %}" method="post">
+                                {{ cart_book_form }}
+                                {% csrf_token %}
+                                <input class="btn btn-outline-secondary" type="submit" value="В корзину">
+                            </form>
+                            <span class="fst-italic">{{ item.price }} руб.</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
