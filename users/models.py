@@ -16,6 +16,9 @@ class User(AbstractBaseUser):
     name = models.CharField(max_length=100, verbose_name='Имя', blank=True)
     surname = models.CharField(max_length=100, verbose_name='Фамилия', blank=True)
     phone_number = models.CharField(max_length=15, verbose_name='Контактный номер телефона', blank=True)
+    street = models.CharField(max_length=50, verbose_name='Улица', blank=True)
+    house = models.CharField(max_length=50, verbose_name='Дом', blank=True)
+    flat = models.CharField(max_length=50, verbose_name='Квартира', blank=True, null=True)
 
     # поле password уже определено
 

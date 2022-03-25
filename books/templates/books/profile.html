@@ -70,6 +70,22 @@
                                     </div>
 
                                     <div>
+                                        <div class="cart_item_title">Адрес</div>
+                                        <div class="cart_item_text">
+                                            {% if user.street %}
+                                                {{ user.street }}
+                                                {{ user.house }}
+                                                {% if user.flat %}
+                                                    {{ user.flat }}
+                                                {% endif %}
+                                            {% else %}
+                                            Не указан
+                                            {% endif %}
+
+                                        </div>
+                                    </div>
+
+                                    <div>
                                         <div class="cart_item_title">Количество заказов</div>
                                         <div class="cart_item_text">
                                             {{ user|get_user_orders_num }}
@@ -89,7 +105,11 @@
                         </a>
                         <a href="{% url 'change_profile' %}">
                             <button type="button" class="button cart_button_checkout">
+                                {% if user.name %}
                                 Редактировать профиль
+                                {% else %}
+                                Заполнить данные профиля
+                                {% endif %}
                             </button>
                         </a>
                     </div>

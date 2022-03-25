@@ -17,6 +17,9 @@ def change_profile(request):
         'name': request.user.name,
         'surname': request.user.surname,
         'phone_number': request.user.phone_number,
+        'street': request.user.street,
+        'house': request.user.house,
+        'flat': request.user.flat,
     }
     if request.method == 'POST':
         form = UserChangeForm(request.POST)
@@ -24,6 +27,9 @@ def change_profile(request):
             request.user.name = form.cleaned_data['name']
             request.user.surname = form.cleaned_data['surname']
             request.user.phone_number = form.cleaned_data['phone_number']
+            request.user.street = form.cleaned_data['street']
+            request.user.house = form.cleaned_data['house']
+            request.user.flat = form.cleaned_data['flat']
             request.user.save()
             messages.success(request, 'Данные профиля успешно изменены')
             return redirect('profile', pk=request.user.pk)

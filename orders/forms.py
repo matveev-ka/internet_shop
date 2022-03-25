@@ -21,6 +21,7 @@ class OrderCreateForm(forms.ModelForm):
                                   choices=CITY_CHOICES,
                                   coerce=str,
                                   widget=forms.Select(attrs={'class': 'form-select'}))
+
     street = forms.CharField(label='Улица',
                              widget=forms.TextInput(attrs={'class': 'form-control'}))
     house = forms.CharField(label='Дом',
@@ -43,4 +44,4 @@ class OrderCreateForm(forms.ModelForm):
 
     class Meta:
         model = Order
-        fields = ['city', 'street', 'house', 'flat', 'phone_number', 'paid_by', 'name', 'surname']
+        fields = ['city', 'paid_by', 'street', 'house', 'flat', 'phone_number', 'name', 'surname']
