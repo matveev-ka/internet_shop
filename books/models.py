@@ -17,10 +17,14 @@ class Book(models.Model):
     price = models.DecimalField(verbose_name='Стоимость', default=0.0, max_digits=5, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата добавления')
     available = models.BooleanField(default=True, verbose_name='Наличие')
-    rating = models.FloatField(verbose_name='Рейтинг', default=0.0)
+    rating = models.FloatField(verbose_name='Рейтинг', default=0.0, blank=True)
 
     # связь для таблиц Book и Category
     category = models.ForeignKey('Category', on_delete=models.PROTECT, verbose_name='Категория')
+
+    # def get_rating(self):
+    #     # считает рейтинг книги
+    #     return sum(Decimal(item['price']) * item['quantity'] for item in self.cart.values())
 
     def get_absolute_url(self):
         return reverse('view_book', kwargs={'pk': self.pk})
@@ -61,6 +65,7 @@ class Comment(models.Model):
     created = models.DateTimeField(verbose_name='Создано', auto_now_add=True)
     updated = models.DateTimeField(verbose_name='Обновлено', auto_now=True)
     active = models.BooleanField(default=True)
+    rating = models.IntegerField(verbose_name='Оценка', blank=True)
 
     class Meta:
         ordering = ('created',)

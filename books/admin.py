@@ -46,9 +46,10 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('user', 'book', 'created', 'active')
+    list_display = ('user', 'book', 'rating', 'created', 'active')
     list_filter = ('active', 'created', 'updated')
     search_fields = ('user', 'book')
+    ordering = ['-created']
 
 
 admin.site.register(Book, BookAdmin)

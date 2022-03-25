@@ -37,6 +37,51 @@
                         <div class="media-body">
                             <h5 class="card-title">{{ item.title }}</h5>
                             <h6 class="card-title text-muted">{{ item.author }}, {{ item.year }}</h6>
+                            <span>
+                                {% if item.rating == 0.0 %}
+                                <p></p>
+                                {% elif item.rating <= 1 %}
+                                <p>
+                                    <span class="fa fa-star" style="color: orange;"></span>
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star"></span>
+                                </p>
+                                {% elif item.rating <= 2 %}
+                                <p>
+                                    <span class="fa fa-star" style="color: orange;"></span>
+                                    <span class="fa fa-star" style="color: orange;"></span>
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star"></span>
+                                </p>
+                                {% elif item.rating <= 3 %}
+                                <p>
+                                    <span class="fa fa-star" style="color: orange;"></span>
+                                    <span class="fa fa-star" style="color: orange;"></span>
+                                    <span class="fa fa-star" style="color: orange;"></span>
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star"></span>
+                                </p>
+                                {% elif item.rating <= 4 %}
+                                <p>
+                                    <span class="fa fa-star" style="color: orange;"></span>
+                                    <span class="fa fa-star" style="color: orange;"></span>
+                                    <span class="fa fa-star" style="color: orange;"></span>
+                                    <span class="fa fa-star" style="color: orange;"></span>
+                                    <span class="fa fa-star"></span>
+                                </p>
+                                {% elif item.rating <= 5 %}
+                                <p>
+                                    <span class="fa fa-star" style="color: orange;"></span>
+                                    <span class="fa fa-star" style="color: orange;"></span>
+                                    <span class="fa fa-star" style="color: orange;"></span>
+                                    <span class="fa fa-star" style="color: orange;"></span>
+                                    <span class="fa fa-star" style="color: orange;"></span>
+                                </p>
+                                {% endif %}
+                            </span>
                             {% autoescape off %}
                             <p class="card-text">{{ item.description|linebreaks }}</p>
                             {% endautoescape %}
@@ -84,6 +129,8 @@
                         <div class="media-body">
                             <h5 class="card-title">{{ comment.user }}</h5>
                             <p class="card-text">{{ comment.body|linebreaks }}</p>
+                            <hr>
+                            <p class="card-text">Оценка: {{ comment.rating }}</p>
                         </div>
                     </div>
                 </div>

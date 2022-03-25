@@ -67,9 +67,9 @@ class BookOrdering(ListView):
         context = super().get_context_data(**kwargs)
         order_by = self.kwargs['order']
         if order_by == '-rating':
-            order_by = 'рейтингу (по убыванию)'
+            order_by = 'популярности (по убыванию)'
         if order_by == 'rating':
-            order_by = 'рейтингу (по возрастанию)'
+            order_by = 'популярности (по возрастанию)'
         if order_by == 'price':
             order_by = 'цене (по возрастанию)'
         if order_by == '-price':
@@ -233,8 +233,13 @@ def view_book(request, pk):
         if comment_form.is_valid():
             new_comment = comment_form.save(commit=False)
             new_comment.book = book
+            if book.rating == 0.0:
+                book.rating = new_comment.rating
+            else:
+                book.rating = (book.rating + new_comment.rating) / 2
             new_comment.user = request.user
             new_comment.save()
+            book.save()
             messages.success(request, 'Ваш отзыв был добавлен')
             return redirect('view_book', pk)
         else:
