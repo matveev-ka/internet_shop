@@ -26,8 +26,8 @@ class OrderCreateForm(forms.ModelForm):
                              widget=forms.TextInput(attrs={'class': 'form-control'}))
     house = forms.CharField(label='Дом',
                             widget=forms.TextInput(attrs={'class': 'form-control'}))
-    flat = forms.CharField(label='Квартира',
-                           widget=forms.TextInput(attrs={'class': 'form-control'}))
+    flat = forms.CharField(label='Квартира', required=False,
+                           widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '-'}))
     phone_number = forms.CharField(label='Контактный номер телефона',
                                    widget=forms.TextInput(attrs={'class': 'form-control'}))
     paid_by = forms.TypedChoiceField(label='Способ оплаты',
