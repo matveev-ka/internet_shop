@@ -250,6 +250,6 @@ def view_book(request, pk):
         'item': book,
         'title': book,
         'cart_book_form': CartAddBookForm(),
-        'comments': book.comments.filter(active=True),
+        'comments': book.comments.filter(active=True).reverse(),
         'comment_form': comment_form,
     })

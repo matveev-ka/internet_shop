@@ -117,6 +117,23 @@
     <h2>Отзывы: {{ total_comments }}</h2>
     {% endwith %}
 
+    {% if request.user.is_authenticated %}
+
+    <h5>Оставить отзыв:</h5>
+    <form method="post">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <div class="d-grid gap-3">
+            <button class="btn btn-primary" type="submit">Добавить отзыв</button>
+        </div>
+    </form>
+
+    {% else %}
+
+    Чтобы оставить свой комментарий, <a href="{% url 'login' %}">авторизуйтесь</a>.
+
+    {% endif %}
+
     {% for comment in comments %}
     <div class="row mt-3">
         <div class="col-md-12">
@@ -140,23 +157,6 @@
     {% empty %}
     <p>Оставьте отзыв первым.</p>
     {% endfor %}
-
-    {% if request.user.is_authenticated %}
-
-    <h5>Оставить отзыв:</h5>
-    <form method="post">
-        {% csrf_token %}
-        {{ comment_form.as_p }}
-        <div class="d-grid gap-3">
-            <button class="btn btn-primary" type="submit">Добавить отзыв</button>
-        </div>
-    </form>
-
-    {% else %}
-
-    Чтобы оставить свой комментарий, <a href="{% url 'login' %}">авторизуйтесь</a>.
-
-    {% endif %}
 
 </div>
 
