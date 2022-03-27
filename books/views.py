@@ -8,6 +8,7 @@ from users.forms import RegisterForm, LoginForm, UserChangeForm
 from cart.forms import CartAddBookForm
 from django.contrib.auth import get_user_model
 from .forms import CommentForm
+
 User = get_user_model()
 
 
@@ -159,12 +160,28 @@ def user_logout(request):
     return redirect('login')
 
 
+class BookCatalog(ListView):
+    """Возвращает список с книгами, которые доступны для покупки"""
+    model = Book
+    template_name = 'books/catalog.html'
+    context_object_name = 'books'
+    paginate_by = 12
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Каталог'
+        context['cart_book_form'] = CartAddBookForm()
+        return context
+
+    def get_queryset(self):
+        return Book.objects.filter(available=True)
+
+
 class HomeShop(ListView):
-    """Возвращает список с книгами, который доступны для покупки"""
+    """Возвращает список с книгами, которые доступны для покупки"""
     model = Book
     template_name = 'books/home.html'
     context_object_name = 'books'
-    paginate_by = 12
 
     # количество новостей на странице
 
@@ -175,13 +192,14 @@ class HomeShop(ListView):
         return context
 
     def get_queryset(self):
-        return Book.objects.filter(available=True)
+        """Возвращает 8 книг с наивысшим рейтингом"""
+        return Book.objects.filter(available=True).order_by('-rating')[:8]
 
 
 class BooksByCategory(ListView):
     """Возвращает список книг из выбранной категории"""
     model = Book
-    template_name = 'books/home.html'
+    template_name = 'books/catalog.html'
     context_object_name = 'books'
     # изменяет дефолтное название объекта
     allow_empty = False
@@ -204,7 +222,7 @@ class BooksByCategory(ListView):
 class BooksByAuthor(ListView):
     """Возвращает список книг выбранного автора"""
     model = Book
-    template_name = 'books/home.html'
+    template_name = 'books/catalog.html'
     context_object_name = 'books'
     # изменяет дефолтное название объекта
     allow_empty = False

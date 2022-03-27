@@ -99,9 +99,9 @@
                         </div>
                     </div>
                     <div class="cart_buttons">
-                        <a href="{% url 'home' %}" style="text-decoration: none">
+                        <a href="{% url 'catalog' %}" style="text-decoration: none">
                             <button type="button" class="button cart_button_clear">
-                                Вернуться в магазин
+                                Перейти в каталог
                             </button>
                         </a>
                         {% if request.user.is_authenticated %}
@@ -120,9 +120,9 @@
                     </div>
                     {% else %}
                     <p class="fs-4">В корзине пусто.</p>
-                        <a href="{% url 'home' %}">
+                        <a href="{% url 'catalog' %}">
                             <button type="button" class="button cart_button_clear">
-                                Вернуться в магазин
+                                Перейти в каталог
                             </button>
                         </a>
                     {% endif %}

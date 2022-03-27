@@ -18,22 +18,40 @@
 
 {% block content %}
 
-<div class="container py-4">
+<!--сортировка-->
+<ul class="list-group list-group-horizontal">
+    <li style="border: 0;" class="list-group-item"><span class="text-muted">Сортировать по:</span></li>
+    <div class="dropdown">
 
-    <div class="p-5 mb-4 bg-light rounded-3">
-        <div class="container-fluid py-5">
-            <h1 class="display-5 fw-bold">Книжный интернет-магазин</h1>
-            <p class="col-md-8 fs-4">Данный проект был создан для портфолио с помощью Python Django, Bootstrap 5.
-                *Не является настоящим магазином.</p>
-            <a href="{% url 'catalog' %}" style="text-decoration: none" class="btn btn-primary my-2">Перейти в каталог</a>
-        </div>
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                data-bs-toggle="dropdown" aria-expanded="false">
+            Популярности
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li><a class="dropdown-item" href="{{ 'rating'|get_order_url }}">По возрастанию</a></li>
+            <li><a class="dropdown-item" href="{{ '-rating'|get_order_url }}">По убыванию</a></li>
+        </ul>
+
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2"
+                data-bs-toggle="dropdown" aria-expanded="false">
+            Цене
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+            <li><a class="dropdown-item" href="{{ 'price'|get_order_url }}">По возрастанию</a></li>
+            <li><a class="dropdown-item" href="{{ '-price'|get_order_url }}">По убыванию</a></li>
+        </ul>
+
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton3"
+                data-bs-toggle="dropdown" aria-expanded="false">
+            Новизне
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
+            <li><a class="dropdown-item" href="{{ 'created_at'|get_order_url }}">По возрастанию</a></li>
+            <li><a class="dropdown-item" href="{{ '-created_at'|get_order_url }}">По убыванию</a></li>
+        </ul>
     </div>
+</ul>
 
-</div>
-
-<div class="container py-4">
-    <h3 class="fw-bold">Популярные товары:</h3>
-</div>
 
 <div class="container mt-2 mb-3">
     <div class="row row-cols-md-4 g-3">

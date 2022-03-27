@@ -3,6 +3,7 @@ from .views import *
 
 urlpatterns = [
     path('', HomeShop.as_view(), name='home'),
+    path('catalog/', BookCatalog.as_view(), name='catalog'),
     path('category/<int:category_id>/', BooksByCategory.as_view(), name='category'),
     path('book/<int:pk>/', view_book, name='view_book'),
     path('register/', register, name='register'),
