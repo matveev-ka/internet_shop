@@ -14,4 +14,5 @@ urlpatterns = [
     path('order_by/<str:order>/', BookOrdering.as_view(), name='book_ordering'),
     path('profile/<int:pk>/', Profile.as_view(), name='profile'),
     path('change_profile/', change_profile, name='change_profile'),
+    path('edit_comment/<int:pk>/', edit_comment, name='edit_comment'),
 ]

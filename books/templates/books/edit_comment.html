@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block breadcrumbs %}
+<nav style="--bs-breadcrumb-divider: '>'; margin-left: 20px;" aria-label="breadcrumb">
+    <ol class="breadcrumb mt-3">
+        <li class="breadcrumb-item active"><a href="{% url 'home' %}">Главная</a></li>
+        <li class="breadcrumb-item">Редактирование комментария</li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <div class="row justify-content-md-center">
+        <div class="col-md-7">
+
+            <h3 class="fw-normal text-center" text-align="center">Редактирование комментария</h3>
+            <form method="post">
+
+                {% csrf_token %}
+                {{ comment_form.as_p }}
+
+                <div class="d-grid gap-2">
+                    <button class="btn btn-primary" type="submit">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

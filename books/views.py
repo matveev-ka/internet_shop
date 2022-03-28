@@ -12,6 +12,37 @@ from .forms import CommentForm
 User = get_user_model()
 
 
+def edit_comment(request, pk):
+    """Возвращает форму редактирования для комментария"""
+    comment = Comment.objects.get(pk=pk)
+    book = Book.objects.get(pk=comment.book.pk)
+    data = {
+        'body': comment.body,
+        'rating': comment.rating,
+    }
+    if request.method == 'POST':
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            comment.body = comment_form.cleaned_data['body']
+            comment.rating = comment_form.cleaned_data['rating']
+            if len(book.comments.filter(active=True)) == 1:
+                book.rating = comment.rating
+            else:
+                book.rating = book.rating + ((int(comment.rating) - int(data.get('rating'))) / 2)
+            comment.save()
+            book.save()
+            messages.success(request, 'Ваш отзыв был изменен')
+            return redirect('view_book', book.pk)
+        else:
+            messages.error(request, 'Ошибка редактирования комментария')
+    else:
+        comment_form = CommentForm(data)
+    return render(request, 'books/edit_comment.html', {
+        'title': book,
+        'comment_form': comment_form,
+    })
+
+
 def change_profile(request):
     """Изменение данных пользователя"""
     data = {
