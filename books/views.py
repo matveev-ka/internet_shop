@@ -8,6 +8,7 @@ from users.forms import RegisterForm, LoginForm, UserChangeForm
 from cart.forms import CartAddBookForm
 from django.contrib.auth import get_user_model
 from .forms import CommentForm
+from orders.models import Order
 
 User = get_user_model()
 
@@ -80,13 +81,17 @@ class Profile(DetailView):
     def get_context_data(self, *, object_list=None, **kwargs):
         """Добавляет в существующий контекст новые данные"""
         context = super().get_context_data(**kwargs)
+        user = User.objects.get(pk=self.kwargs['pk'])
+        orders = Order.objects.filter(user=user)
+        context['orders'] = orders
+        context['user_orders_num'] = orders.count()
         context['title'] = 'Личный кабинет'
         return context
 
 
 class BookOrdering(ListView):
     model = Book
-    template_name = 'books/home.html'
+    template_name = 'books/catalog.html'
     context_object_name = 'books'
     paginate_by = 12
 
@@ -264,9 +269,7 @@ class BooksByAuthor(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         """Добавляет в существующий контекст новые данные"""
         context = super().get_context_data(**kwargs)
-        for item in Book.objects.filter(author=self.kwargs['author']):
-            context['title'] = item.author
-            break
+        context['title'] = self.kwargs['author']
         context['cart_book_form'] = CartAddBookForm()
         return context
 

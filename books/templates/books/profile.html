@@ -88,7 +88,7 @@
                                     <div>
                                         <div class="cart_item_title">Количество заказов</div>
                                         <div class="cart_item_text">
-                                            {{ user|get_user_orders_num }}
+                                            {{ user_orders_num }}
                                         </div>
                                     </div>
 
@@ -114,13 +114,13 @@
                         </a>
                     </div>
 
-                    {% if user|get_user_orders_num %}
+                    {% if user_orders_num %}
 
                     <h3>История заказов:</h3>
                     <p>
 
                         <!--Возвращает заказы пользователя-->
-                        {% for item in user.user_orders.all %}
+                        {% for item in orders %}
 
                     <div class="cart_items" style="margin-top: 26px">
 
@@ -129,7 +129,7 @@
                         <ul class="cart_list" style="padding-right: 26px">
 
                             <!--Возвращает товары из заказа-->
-                            {% for product in item.items.all %}
+                            {% for product in item|product_from_order %}
                             {% with book=product.book %}
 
                             <li class="cart_item clearfix" style="margin: 5px;">

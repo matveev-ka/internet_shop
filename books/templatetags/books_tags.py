@@ -15,12 +15,6 @@ def get_categories():
     return Category.objects.filter(book__available=True).annotate(Count('book')).order_by('title')
 
 
-@register.filter()
-def get_user_orders_num(value):
-    """Возвращает количество заказов пользователя"""
-    return Order.objects.filter(user=value).count()
-
-
 @register.filter(needs_autoescape=True)
 def get_mark_str(value, arg, autoescape=True):
     """Выделяет текст, который искал пользователь"""
@@ -37,3 +31,9 @@ def get_order_url(value):
     """Возвращает поле, по которому нужно делать сортировку"""
     # Не работает в различных категориях
     return reverse('book_ordering', kwargs={'order': value})
+
+
+@register.filter()
+def product_from_order(value):
+    """Возвращает товары из заказа"""
+    return OrderItem.objects.filter(order=value)
